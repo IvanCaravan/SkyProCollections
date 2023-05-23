@@ -2,45 +2,43 @@ package pro.sky.collections;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EmployeeService {
-    public List<Employee> employeeList = new ArrayList<>();
-    public final int MAX_EMPLOYEES = 10;
+    private final Map<String, Employee> employees;
 
+    public EmployeeService() {
+        this.employees = new HashMap<>();
+    }
     public Employee addEmployee(String firstName, String lastName) {
         //логика реализации добавления сотрудника
     Employee employee = new Employee(firstName, lastName);
-        if (employeeList.size() >= MAX_EMPLOYEES) {
+        if (employees.containsKey(employee.getFullName())) {
             throw new EmployeeStorageIsFullException("лист переполнен");
         }
-    if (employeeList.contains(employee)) {
-        throw new EmployeeAlreadyAddedException("сотрудник уже добавлен");
+        employees.put(employee.getFullName(), employee);
+        return employee;
     }
-        employeeList.add(employee);
-    return employee;
-    }
-
     public Employee removeEmployee(String firstName, String lastName) {
         //логика удаления сотрудника
         Employee employee = new Employee(firstName,lastName);
-        if (employeeList.contains(employee)) {
-            employeeList.remove(employee);
-            return employee;
-        } else throw new EmployeeNotFoundException("такого сотрудника нет");
+        if (employees.containsKey(employee.getFullName())) {
+            return employees.remove(employee.getFullName());
+        }
+        throw new EmployeeNotFoundException("такого сотрудника нет");
     }
 
     public Employee findEmployee(String firstName, String lastName) {
         //логика нахождения сотрудника
         Employee employee = new Employee(firstName,lastName);
-        if (employeeList.contains(employee)) {
-            return employee;
-        } else throw new EmployeeNotFoundException("такого сотрудника нет");
+        if (employees.containsKey(employee.getFullName())) {
+            return employees.get(employee.getFullName());
+        }
+        throw new EmployeeNotFoundException("такого сотрудника нет");
     }
 
-    public List<Employee> findAll() {
-        return employeeList;
+    public Collection<Employee> findAll() {
+        return Collections.unmodifiableCollection(employees.values());
     }
 }
