@@ -4,35 +4,38 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pro.sky.collections.Employee;
-import pro.sky.collections.EmployeeService;
+import pro.sky.collections.model.Employee;
+import pro.sky.collections.service.EmployeeService;
 
-import java.util.List;
+import java.util.Collection;
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("employee")
 public class EmployeeController {
-    private final EmployeeService employeeService;
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    private final EmployeeService service;
+
+    public EmployeeController(EmployeeService service) {
+        this.service = service;
     }
+
     @GetMapping("/add")
-    public Employee addEmployee(@RequestParam("firstName") String firstName,
-                        @RequestParam("lastName") String lastName) {
-        return employeeService.addEmployee(firstName, lastName);
+    public Employee addEmployee(@RequestParam String firstName,
+                                @RequestParam String lastName) {
+        return service.add(firstName, lastName);
     }
     @GetMapping("/remove")
-    public Employee removeEmployee(@RequestParam("firstName") String firstName,
-                        @RequestParam("lastName") String lastName) {
-        return employeeService.removeEmployee(firstName, lastName);
+    public Employee removeEmployee(@RequestParam String firstName,
+                                @RequestParam String lastName) {
+        return service.remove(firstName, lastName);
     }
     @GetMapping("/find")
-    public Employee findEmployee(@RequestParam("firstName") String firstName,
-                        @RequestParam("lastName") String lastName) {
-        return employeeService.findEmployee(firstName, lastName);
+    public Employee findEmployee(@RequestParam String firstName,
+                                @RequestParam String lastName) {
+        return service.find(firstName, lastName);
     }
-    @GetMapping()
-    public List<Employee> printAllEmployees() {
-        return employeeService.employeeList;
+
+    @GetMapping
+    public Collection<Employee> findAll() {
+        return service.findAll();
     }
 }
