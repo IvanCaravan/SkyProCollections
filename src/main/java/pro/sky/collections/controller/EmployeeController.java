@@ -10,32 +10,34 @@ import pro.sky.collections.service.EmployeeService;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("employee")
+@RequestMapping("/employee")
 public class EmployeeController {
-    private final EmployeeService service;
+    private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService service) {
-        this.service = service;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/add")
     public Employee addEmployee(@RequestParam String firstName,
-                                @RequestParam String lastName) {
-        return service.add(firstName, lastName);
+                                @RequestParam String lastName, @RequestParam int salary, @RequestParam int department) {
+        return employeeService.add(firstName, lastName, salary, department);
     }
+
     @GetMapping("/remove")
     public Employee removeEmployee(@RequestParam String firstName,
-                                @RequestParam String lastName) {
-        return service.remove(firstName, lastName);
+                                   @RequestParam String lastName, @RequestParam int salary, @RequestParam int department) {
+        return employeeService.remove(firstName, lastName, salary, department);
     }
+
     @GetMapping("/find")
     public Employee findEmployee(@RequestParam String firstName,
-                                @RequestParam String lastName) {
-        return service.find(firstName, lastName);
+                                 @RequestParam String lastName, @RequestParam int salary, @RequestParam int department) {
+        return employeeService.find(firstName, lastName, salary, department);
     }
 
     @GetMapping
     public Collection<Employee> findAll() {
-        return service.findAll();
+        return employeeService.findAll();
     }
 }
